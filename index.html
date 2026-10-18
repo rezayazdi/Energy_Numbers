@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>شماره ها | رستوران انرژی</title>
+  <style>
+    @font-face {
+      font-family: "Vazirmatn";
+      src: url("fonts/Vazirmatn-Regular.woff2") format("woff2");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Vazirmatn";
+      src: url("fonts/Vazirmatn-Medium.woff2") format("woff2");
+      font-weight: 500;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: "Vazirmatn";
+      src: url("fonts/Vazirmatn-Bold.woff2") format("woff2");
+      font-weight: 700;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #f4f4f5;
+      --card: #ffffff;
+      --fg: #18181b;
+      --muted: #71717a;
+      --primary: #18181b;
+      --primary-hover: #27272a;
+      --accent: #16a34a;
+      --accent-hover: #15803d;
+      --border: #d4d4d8;
+      --danger: #dc2626;
+      --danger-hover: #b91c1c;
+      --pad: #e4e4e7;
+      --pad-active: #a1a1aa;
+      --toast-bg: #18181b;
+      --toast-fg: #fafafa;
+      --row-hover: #f4f4f5;
+      --warn: #c2410c;
+      --warn-bg: #ffedd5;
+      --today: #18181b;
+      --today-bg: #e4e4e7;
+      --overlay: rgba(24, 24, 27, 0.5);
+      --radius: 12px;
+      --font: "Vazirmatn", Tahoma, sans-serif;
+    }
+
+    html[data-theme="dark"] {
+      --bg: #09090b;
+      --card: #18181b;
+      --fg: #fafafa;
+      --muted: #a1a1aa;
+      --primary: #fafafa;
+      --primary-hover: #e4e4e7;
+      --accent: #22c55e;
+      --accent-hover: #4ade80;
+      --border: #3f3f46;
+      --danger: #f87171;
+      --danger-hover: #ef4444;
+      --pad: #27272a;
+      --pad-active: #52525b;
+      --toast-bg: #fafafa;
+      --toast-fg: #18181b;
+      --row-hover: #27272a;
+      --warn: #fb923c;
+      --warn-bg: #431407;
+      --today: #fafafa;
+      --today-bg: #3f3f46;
+      --overlay: rgba(0, 0, 0, 0.7);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--fg);
+    }
+
+    .icon {
+      width: 1.25em;
+      height: 1.25em;
+      display: inline-block;
+      vertical-align: -0.2em;
+      flex-shrink: 0;
+    }
+    .icon-lg { width: 1.5em; height: 1.5em; }
+
+    .shell {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px 20px 32px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+      min-height: 64px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.15rem, 2.4vw, 1.75rem);
+      font-weight: 700;
+      line-height: 1.35;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 1.2rem;
+      font-weight: 700;
+      border: none;
+      border-radius: var(--radius);
+      padding: 12px 18px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background 0.15s ease, transform 0.1s ease, color 0.15s ease;
+    }
+    button:active { transform: scale(0.98); }
+    button:focus-visible {
+      outline: 3px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    .btn-icon {
+      padding: 12px;
+      min-width: 48px;
+      min-height: 48px;
+    }
+
+    .btn-accent { background: var(--accent); color: #fff; }
+    .btn-accent:hover { background: var(--accent-hover); }
+    .btn-ghost {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+    .btn-ghost:hover { background: var(--pad); }
+    .btn-danger { background: var(--danger); color: #fff; }
+    .btn-danger:hover { background: var(--danger-hover); }
+    .btn-nav-active { background: var(--primary); color: #18181b; }
+    html:not([data-theme="dark"]) .btn-nav-active { color: #fff; }
+    .btn-nav {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--border);
+    }
+    .btn-called {
+      background: var(--accent);
+      color: #fff;
+      font-size: 1.05rem;
+      padding: 10px 14px;
+      white-space: nowrap;
+    }
+    .btn-called:hover { background: var(--accent-hover); }
+    .btn-called.is-done {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid var(--accent);
+    }
+    .btn-row-danger,
+    .btn-row-edit {
+      background: transparent;
+      padding: 10px;
+      min-width: 48px;
+      min-height: 48px;
+      border: 2px solid;
+    }
+    .btn-row-danger {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+    .btn-row-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+    .btn-row-edit {
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-row-edit:hover {
+      background: var(--primary);
+      color: #18181b;
+    }
+    html:not([data-theme="dark"]) .btn-row-edit:hover { color: #fff; }
+
+    .btn-filter {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      font-size: 1.05rem;
+      padding: 10px 14px;
+    }
+    .btn-filter.active {
+      background: var(--primary);
+      color: #18181b;
+      border-color: transparent;
+    }
+    html:not([data-theme="dark"]) .btn-filter.active { color: #fff; }
+
+    .btn-page {
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      min-width: 48px;
+    }
+    .btn-page:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .page { display: none; }
+    .page.active { display: block; }
+
+    .card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: 1fr minmax(280px, 360px);
+      min-height: 560px;
+    }
+
+    .form-fields {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .form-fields h2,
+    .numpad h2,
+    .list-toolbar h2 {
+      margin: 0 0 16px;
+      font-size: 1.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    label {
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .hint {
+      margin: 4px 0 0;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--danger);
+      min-height: 1.4em;
+    }
+    .hint[hidden] { display: none !important; }
+
+    input[type="text"] {
+      font-family: inherit;
+      font-size: 1.55rem;
+      font-weight: 500;
+      padding: 14px 16px;
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      color: var(--fg);
+      background: var(--bg);
+      width: 100%;
+      text-align: center;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 30%, transparent);
+    }
+
+    .phone-wrap {
+      --phone-h: 68px;
+      --phone-r: 12px;
+      display: flex;
+      flex-direction: row;
+      direction: ltr;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+    }
+    .phone-prefix {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--phone-h);
+      min-width: calc(var(--phone-h) + 12px);
+      padding: 0 12px;
+      font-size: 1.65rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--primary);
+      background: var(--pad);
+      border: 2px solid var(--border);
+      border-radius: var(--phone-r);
+      user-select: none;
+      pointer-events: none;
+      flex: 0 0 auto;
+    }
+    .phone-digits {
+      display: grid;
+      grid-template-columns: repeat(9, minmax(0, 1fr));
+      gap: 6px;
+      flex: 1 1 auto;
+      min-width: 0;
+      height: var(--phone-h);
+      align-items: stretch;
+    }
+    .phone-digit {
+      box-sizing: border-box;
+      width: 100%;
+      height: var(--phone-h);
+      min-width: 0;
+      font-family: inherit;
+      font-size: 1.55rem;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      color: var(--fg);
+      background: var(--bg);
+      border: 2px solid var(--border);
+      border-radius: var(--phone-r);
+      padding: 0;
+      margin: 0;
+      direction: ltr;
+      -moz-appearance: textfield;
+    }
+    .phone-digit::-webkit-outer-spin-button,
+    .phone-digit::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .phone-digit:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 30%, transparent);
+      z-index: 1;
+      position: relative;
+    }
+    @media (max-width: 768px) {
+      .phone-wrap {
+        --phone-h: 56px;
+        --phone-r: 10px;
+        gap: 5px;
+      }
+      .phone-digits { gap: 4px; }
+      .phone-digit { font-size: 1.3rem; }
+      .phone-prefix { font-size: 1.35rem; }
+    }
+
+    .numpad {
+      background: var(--pad);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .pad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      width: 100%;
+      max-width: 320px;
+    }
+    .pad-key {
+      font-size: 2rem;
+      font-weight: 700;
+      min-height: 72px;
+      background: var(--card);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+    }
+    .pad-key:hover { background: var(--pad-active); }
+    .pad-key.clear { background: var(--danger); color: #fff; border-color: transparent; }
+    .pad-key.back { background: var(--primary); color: #18181b; border-color: transparent; }
+    html:not([data-theme="dark"]) .pad-key.back { color: #fff; }
+
+    .list-toolbar {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+    .list-toolbar h2 { margin: 0; }
+    .filter-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .filter-count {
+      margin-inline-start: auto;
+      font-size: 1.05rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      max-height: 52dvh;
+      overflow: auto;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 16px;
+      align-items: center;
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      background: var(--card);
+      border-inline-start: 4px solid transparent;
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-row:hover { background: var(--row-hover); }
+    .contact-row.called {
+      background: color-mix(in srgb, var(--accent) 10%, var(--card));
+      border-inline-start-color: var(--accent);
+    }
+    .contact-row.pending {
+      background: color-mix(in srgb, var(--warn) 8%, var(--card));
+      border-inline-start-color: var(--warn);
+    }
+    .contact-row.is-today {
+      box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--today) 35%, transparent);
+    }
+
+    .contact-meta { min-width: 0; }
+    .contact-name {
+      font-size: 1.45rem;
+      font-weight: 700;
+      margin: 0 0 6px;
+      word-break: break-word;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .contact-phone {
+      font-size: 1.35rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin: 0 0 4px;
+      direction: ltr;
+      text-align: right;
+    }
+    .contact-date {
+      font-size: 1.05rem;
+      color: var(--muted);
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      line-height: 1.2;
+    }
+    .badge-today {
+      background: var(--today-bg);
+      color: var(--today);
+    }
+    .badge-pending {
+      background: var(--warn-bg);
+      color: var(--warn);
+    }
+    .badge-done {
+      background: color-mix(in srgb, var(--accent) 18%, transparent);
+      color: var(--accent);
+    }
+
+    .contact-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .pager {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 14px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .pager-info {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--muted);
+      min-width: 8ch;
+      text-align: center;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: var(--overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+    .modal-backdrop[hidden] { display: none !important; }
+    .modal-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .modal {
+      background: var(--card);
+      color: var(--fg);
+      border: 2px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      width: min(440px, 100%);
+      box-shadow: 0 20px 50px color-mix(in srgb, var(--fg) 18%, transparent);
+    }
+    .modal h3 {
+      margin: 0 0 10px;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .modal p {
+      margin: 0 0 22px;
+      font-size: 1.15rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .save-row {
+      margin-top: 24px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .empty {
+      padding: 56px 24px;
+      text-align: center;
+      font-size: 1.4rem;
+      color: var(--muted);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+    .empty[hidden] { display: none !important; }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--toast-bg);
+      color: var(--toast-fg);
+      font-size: 1.2rem;
+      font-weight: 500;
+      padding: 14px 24px;
+      border-radius: var(--radius);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast.show { opacity: 1; }
+
+    @media (max-width: 768px) {
+      .form-layout { grid-template-columns: 1fr; }
+      .brand h1 { font-size: 1.5rem; }
+      .pad-key { min-height: 64px; font-size: 1.75rem; }
+      .contact-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+      .contact-actions { width: 100%; }
+      .btn-called { flex: 1; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      button, .toast { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Phosphor Icons (Bold) — bundled inline for offline Electron -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+    <symbol id="ph-phone" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M222.37,158.46l-47.11-21.11-.13-.06a16,16,0,0,0-15.18,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.75a16,16,0,0,0,1.32-15.06l0-.12L97.08,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.45A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.23,40.23,0,0,1,82.87,40.72l20.8,46.37-20.69,24.74a8.14,8.14,0,0,0-.63.83,16,16,0,0,0-.67,15.44c9.07,18.53,27.7,37.13,46.45,46.2a16,16,0,0,0,15.45-.66,8.37,8.37,0,0,0,.81-.6l24.71-20.72,46.32,20.79A40.23,40.23,0,0,1,176,208Z"/>
+    </symbol>
+    <symbol id="ph-phone-check" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M152,176a8,8,0,0,1-8,8H120a8,8,0,0,1,0-16h24A8,8,0,0,1,152,176Zm70.37-17.54-47.11-21.11-.13-.06a16,16,0,0,0-15.18,1.4,8.12,8.12,0,0,0-.75.56L134.87,160c-15.42-7.49-31.34-23.29-38.83-38.51l20.78-24.71c.2-.25.39-.5.57-.75a16,16,0,0,0,1.32-15.06l0-.12L97.08,33.64a16,16,0,0,0-16.62-9.52A56.26,56.26,0,0,0,32,80c0,79.4,64.6,144,144,144a56.26,56.26,0,0,0,55.88-48.45A16,16,0,0,0,222.37,158.46ZM176,208A128.14,128.14,0,0,1,48,80,40.23,40.23,0,0,1,82.87,40.72l20.8,46.37-20.69,24.74a8.14,8.14,0,0,0-.63.83,16,16,0,0,0-.67,15.44c9.07,18.53,27.7,37.13,46.45,46.2a16,16,0,0,0,15.45-.66,8.37,8.37,0,0,0,.81-.6l24.71-20.72,46.32,20.79A40.23,40.23,0,0,1,176,208ZM149.66,93.66l48-48a8,8,0,0,1,11.32,11.32l-48,48a8,8,0,0,1-11.32-11.32Z"/>
+    </symbol>
+    <symbol id="ph-check-circle" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"/>
+    </symbol>
+    <symbol id="ph-trash" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"/>
+    </symbol>
+    <symbol id="ph-plus" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M224,128a8,8,0,0,1-8,8H136v80a8,8,0,0,1-16,0V136H40a8,8,0,0,1,0-16h80V40a8,8,0,0,1,16,0v80h80A8,8,0,0,1,224,128Z"/>
+    </symbol>
+    <symbol id="ph-list" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M224,128a8,8,0,0,1-8,8H40a8,8,0,0,1,0-16H216A8,8,0,0,1,224,128ZM40,72H216a8,8,0,0,0,0-16H40a8,8,0,0,0,0,16ZM216,184H40a8,8,0,0,0,0,16H216a8,8,0,0,0,0-16Z"/>
+    </symbol>
+    <symbol id="ph-floppy" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M208,32H83.31A15.86,15.86,0,0,0,72,36.69L36.69,72A15.86,15.86,0,0,0,32,83.31V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM168,208H88V152h80Zm40,0H184V152a16,16,0,0,0-16-16H88a16,16,0,0,0-16,16v56H48V83.31l34.34-34.35.12-.12H208ZM160,72a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h56A8,8,0,0,1,160,72Z"/>
+    </symbol>
+    <symbol id="ph-backspace" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M216,40H68.53a16.08,16.08,0,0,0-13.72,7.77L9.14,123.88a8,8,0,0,0,0,8.24l45.67,76.11A16.08,16.08,0,0,0,68.53,216H216a16,16,0,0,0,16-16V56A16,16,0,0,0,216,40Zm0,160H68.53l-42-70,42-70H216ZM106.34,146.34,124.69,128l-18.35-18.34a8,8,0,0,1,11.32-11.32L136,116.69l18.34-18.35a8,8,0,0,1,11.32,11.32L147.31,128l18.35,18.34a8,8,0,0,1-11.32,11.32L136,139.31l-18.34,18.35a8,8,0,0,1-11.32-11.32Z"/>
+    </symbol>
+    <symbol id="ph-eraser" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M225,80.4,183.6,39a24,24,0,0,0-33.94,0L31,157.66a24,24,0,0,0,0,33.94l30.06,30.06A8,8,0,0,0,66.74,224H216a8,8,0,0,0,0-16h-84.7L225,114.34A24,24,0,0,0,225,80.4ZM108.68,208H70.05L42.33,180.28,96,126.59,149.66,180ZM213.67,103,160,156.69,106.34,103,160,49.31,213.67,103Z"/>
+    </symbol>
+    <symbol id="ph-moon" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.09,104.09,0,0,0,114.8,114.8A8,8,0,0,0,233.54,142.23ZM188.9,184a88,88,0,0,1-112.87-112.87A104.11,104.11,0,0,0,188.9,184Z"/>
+    </symbol>
+    <symbol id="ph-sun" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.89A8,8,0,0,0,69.89,58.34l16,16A8,8,0,0,0,74.34,85.89Zm0,116.22-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z"/>
+    </symbol>
+    <symbol id="ph-user-plus" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M256,136a8,8,0,0,1-8,8H232v16a8,8,0,0,1-16,0V144H200a8,8,0,0,1,0-16h16V112a8,8,0,0,1,16,0v16h16A8,8,0,0,1,256,136Zm-57.87,58.85a8,8,0,0,1-12.7,9.74C165.75,181.19,138.28,168,108,168s-57.75,13.19-77.43,36.59a8,8,0,1,1-12.7-9.74C41.49,165.72,75.54,152,108,152S174.51,165.72,198.13,194.85ZM108,136a60,60,0,1,0-60-60A60.07,60.07,0,0,0,108,136Zm0-104a44,44,0,1,1-44,44A44.05,44.05,0,0,1,108,32Z"/>
+    </symbol>
+    <symbol id="ph-address-book" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M160,112a24,24,0,1,1-24-24A24,24,0,0,1,160,112Zm64-72V216a16,16,0,0,1-16,16H64a16,16,0,0,1-16-16V192H32a8,8,0,0,1,0-16H48V136H32a8,8,0,0,1,0-16H48V80H32a8,8,0,0,1,0-16H48V40A16,16,0,0,1,64,24H208A16,16,0,0,1,224,40ZM208,216V40H64V64H80a8,8,0,0,1,0,16H64v40H80a8,8,0,0,1,0,16H64v40H80a8,8,0,0,1,0,16H64v24H208Zm-42.66-45.47c-10.57-6.76-22.7-10.53-35.34-10.53s-24.77,3.77-35.34,10.53A8,8,0,0,0,88,184a40,40,0,0,1,80,0,8,8,0,0,0,5.34,13.53Z"/>
+    </symbol>
+    <symbol id="ph-pencil" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M227.31,73.37,182.63,28.69a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.69,147.31,64l24-24L216,84.69Z"/>
+    </symbol>
+    <symbol id="ph-calendar" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z"/>
+    </symbol>
+    <symbol id="ph-caret-right" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M181.66,133.66l-80,80a8,8,0,0,1-11.32-11.32L164.69,128,90.34,53.66a8,8,0,0,1,11.32-11.32l80,80A8,8,0,0,1,181.66,133.66Z"/>
+    </symbol>
+    <symbol id="ph-caret-left" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M165.66,202.34a8,8,0,0,1-11.32,11.32l-80-80a8,8,0,0,1,0-11.32l80-80a8,8,0,0,1,11.32,11.32L91.31,128Z"/>
+    </symbol>
+    <symbol id="ph-warning" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM116,136V104a12,12,0,0,1,24,0v32a12,12,0,0,1-24,0Zm28,40a16,16,0,1,1-16-16A16,16,0,0,1,144,176Z"/>
+    </symbol>
+  </svg>
+
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <svg class="icon icon-lg" aria-hidden="true"><use href="#ph-phone"></use></svg>
+        <h1>شماره ها | رستوران انرژی</h1>
+      </div>
+      <div class="header-actions">
+        <button type="button" class="btn-ghost btn-icon" id="theme-toggle" aria-label="تغییر تم">
+          <svg class="icon" id="theme-icon" aria-hidden="true"><use href="#ph-moon"></use></svg>
+        </button>
+        <button type="button" id="nav-form" class="btn-nav-active">
+          <svg class="icon" aria-hidden="true"><use href="#ph-plus"></use></svg>
+          ثبت جدید
+        </button>
+        <button type="button" id="nav-list" class="btn-nav">
+          <svg class="icon" aria-hidden="true"><use href="#ph-list"></use></svg>
+          لیست تماس‌ها
+        </button>
+      </div>
+    </header>
+
+    <section id="page-form" class="page active" aria-label="ثبت تماس">
+      <div class="card form-layout">
+        <div class="form-fields">
+          <h2 id="form-title">
+            <svg class="icon" aria-hidden="true"><use href="#ph-user-plus"></use></svg>
+            <span id="form-title-text">ثبت تماس</span>
+          </h2>
+          <label for="name">نام</label>
+          <input id="name" type="text" autocomplete="name" tabindex="1" />
+          <label for="phone">شماره تماس</label>
+          <div class="phone-wrap" role="group" aria-label="شماره تماس">
+            <span class="phone-prefix" aria-hidden="true">09</span>
+            <div class="phone-digits" id="phone-digits">
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="0" aria-label="رقم ۱" tabindex="2" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="1" aria-label="رقم ۲" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="2" aria-label="رقم ۳" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="3" aria-label="رقم ۴" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="4" aria-label="رقم ۵" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="5" aria-label="رقم ۶" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="6" aria-label="رقم ۷" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="7" aria-label="رقم ۸" tabindex="-1" />
+              <input class="phone-digit" type="text" inputmode="numeric" maxlength="1" data-i="8" aria-label="رقم ۹" tabindex="-1" />
+            </div>
+          </div>
+          <p class="hint error" id="phone-hint" hidden></p>
+          <div class="save-row">
+            <button type="button" class="btn-accent" id="save-btn" tabindex="3">
+              <svg class="icon" aria-hidden="true"><use href="#ph-floppy"></use></svg>
+              <span id="save-label">ذخیره</span>
+            </button>
+            <button type="button" class="btn-ghost" id="cancel-edit" hidden tabindex="4">
+              انصراف
+            </button>
+          </div>
+        </div>
+        <div class="numpad" aria-label="پد شماره">
+          <h2>
+            <svg class="icon" aria-hidden="true"><use href="#ph-phone"></use></svg>
+            پد شماره
+          </h2>
+          <div class="pad-grid" id="pad">
+            <button type="button" class="pad-key" tabindex="-1" data-digit="1">1</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="2">2</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="3">3</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="4">4</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="5">5</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="6">6</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="7">7</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="8">8</button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="9">9</button>
+            <button type="button" class="pad-key clear" tabindex="-1" data-action="clear" aria-label="پاک کردن">
+              <svg class="icon icon-lg" aria-hidden="true"><use href="#ph-eraser"></use></svg>
+            </button>
+            <button type="button" class="pad-key" tabindex="-1" data-digit="0">0</button>
+            <button type="button" class="pad-key back" tabindex="-1" data-action="back" aria-label="پس‌بر">
+              <svg class="icon icon-lg" aria-hidden="true"><use href="#ph-backspace"></use></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="page-list" class="page" aria-label="لیست تماس‌ها">
+      <div class="list-toolbar">
+        <h2>
+          <svg class="icon" aria-hidden="true"><use href="#ph-address-book"></use></svg>
+          لیست نام و شماره‌ها
+        </h2>
+        <div class="filter-row" role="group" aria-label="فیلتر لیست">
+          <button type="button" class="btn-filter active" data-filter="all">همه</button>
+          <button type="button" class="btn-filter" data-filter="today">امروز</button>
+          <button type="button" class="btn-filter" data-filter="pending">تماس نگرفته</button>
+          <button type="button" class="btn-filter" data-filter="called">تماس گرفته</button>
+          <span class="filter-count" id="filter-count"></span>
+        </div>
+      </div>
+      <div class="card">
+        <div id="list" class="contact-list"></div>
+        <div id="empty" class="empty" hidden>
+          <svg class="icon icon-lg" aria-hidden="true"><use href="#ph-address-book"></use></svg>
+          <span id="empty-text">هنوز تماسی ثبت نشده.</span>
+        </div>
+        <div class="pager" id="pager" hidden>
+          <button type="button" class="btn-page" id="page-prev" aria-label="صفحه قبل">
+            <svg class="icon" aria-hidden="true"><use href="#ph-caret-right"></use></svg>
+          </button>
+          <span class="pager-info" id="page-info">۱ / ۱</span>
+          <button type="button" class="btn-page" id="page-next" aria-label="صفحه بعد">
+            <svg class="icon" aria-hidden="true"><use href="#ph-caret-left"></use></svg>
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div class="modal-backdrop" id="confirm-modal" role="dialog" aria-modal="true" aria-labelledby="confirm-title" hidden>
+    <div class="modal">
+      <h3 id="confirm-title">
+        <svg class="icon" aria-hidden="true"><use href="#ph-warning"></use></svg>
+        حذف تماس
+      </h3>
+      <p id="confirm-text">این تماس حذف شود؟</p>
+      <div class="modal-actions">
+        <button type="button" class="btn-ghost" id="confirm-cancel">انصراف</button>
+        <button type="button" class="btn-danger" id="confirm-ok">
+          <svg class="icon" aria-hidden="true"><use href="#ph-trash"></use></svg>
+          حذف
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    const KEY = "energy-numbers-contacts";
+    const THEME_KEY = "energy-numbers-theme";
+    const PAGE_SIZE = 5;
+    const PHONE_RE = /^09\d{9}$/;
+    const FA_DIGITS = "۰۱۲۳۴۵۶۷۸۹";
+
+    const nameEl = document.getElementById("name");
+    const digitEls = Array.from(document.querySelectorAll(".phone-digit"));
+    const listEl = document.getElementById("list");
+    const empty = document.getElementById("empty");
+    const toast = document.getElementById("toast");
+    const themeIcon = document.getElementById("theme-icon");
+    const pager = document.getElementById("pager");
+    const modal = document.getElementById("confirm-modal");
+    const cancelEditBtn = document.getElementById("cancel-edit");
+
+    let contacts = migrate(load());
+    let filter = "all";
+    let page = 1;
+    let editingId = null;
+    let pendingDeleteId = null;
+
+    function load() {
+      try {
+        const raw = localStorage.getItem(KEY);
+        const data = raw ? JSON.parse(raw) : [];
+        return Array.isArray(data) ? data : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function save() {
+      localStorage.setItem(KEY, JSON.stringify(contacts));
+    }
+
+    function migrate(list) {
+      let changed = false;
+      const out = list.map((c) => {
+        if (c.createdAt) return c;
+        changed = true;
+        const createdAt = new Date().toISOString();
+        return {
+          ...c,
+          createdAt,
+          created: c.created || new Date(createdAt).toLocaleString("fa-IR"),
+        };
+      });
+      if (changed) localStorage.setItem(KEY, JSON.stringify(out));
+      return out;
+    }
+
+    function showToast(msg, ms) {
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(
+        () => toast.classList.remove("show"),
+        ms == null ? 1800 : ms
+      );
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem(THEME_KEY, theme);
+      themeIcon.innerHTML =
+        theme === "dark"
+          ? '<use href="#ph-sun"></use>'
+          : '<use href="#ph-moon"></use>';
+      document.getElementById("theme-toggle").setAttribute(
+        "aria-label",
+        theme === "dark" ? "حالت روشن" : "حالت تاریک"
+      );
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem(THEME_KEY);
+      if (saved === "light" || saved === "dark") {
+        applyTheme(saved);
+        return;
+      }
+      applyTheme("dark");
+    }
+
+    document.getElementById("theme-toggle").onclick = () => {
+      const next =
+        document.documentElement.getAttribute("data-theme") === "dark"
+          ? "light"
+          : "dark";
+      applyTheme(next);
+    };
+
+    function toFaDigits(n) {
+      return String(n).replace(/\d/g, (d) => FA_DIGITS[Number(d)]);
+    }
+
+    function dayKey(iso) {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "";
+      return d.getFullYear() + "-" + d.getMonth() + "-" + d.getDate();
+    }
+
+    function isToday(iso) {
+      return dayKey(iso) === dayKey(new Date().toISOString());
+    }
+
+    function formatCreated(c) {
+      if (c.created) return c.created;
+      if (!c.createdAt) return "";
+      return new Date(c.createdAt).toLocaleString("fa-IR");
+    }
+
+    function normalizePhone(raw) {
+      return String(raw || "")
+        .replace(/[۰-۹]/g, (d) => String(FA_DIGITS.indexOf(d)))
+        .replace(/\D/g, "");
+    }
+
+    function phoneSuffix(raw) {
+      let digits = normalizePhone(raw);
+      if (digits.startsWith("09")) digits = digits.slice(2);
+      return digits.slice(0, 9);
+    }
+
+    function readDigits() {
+      return digitEls.map((el) => normalizePhone(el.value).slice(0, 1)).join("");
+    }
+
+    function writeDigits(suffix) {
+      const s = phoneSuffix(suffix);
+      digitEls.forEach((el, i) => {
+        el.value = s[i] || "";
+      });
+    }
+
+    function focusDigit(i) {
+      const el = digitEls[Math.max(0, Math.min(digitEls.length - 1, i))];
+      el.focus();
+      el.select();
+    }
+
+    function fullPhone() {
+      return "09" + readDigits();
+    }
+
+    function resetPhone() {
+      writeDigits("");
+      setPhoneHint();
+    }
+
+    function setPhoneHint(msg) {
+      const hint = document.getElementById("phone-hint");
+      if (msg) {
+        hint.textContent = msg;
+        hint.hidden = false;
+      } else {
+        hint.textContent = "";
+        hint.hidden = true;
+      }
+    }
+
+    function isValidPhone(digits) {
+      return PHONE_RE.test(digits);
+    }
+
+    function isDuplicatePhone(digits, exceptId) {
+      return contacts.some(
+        (c) => c.id !== exceptId && normalizePhone(c.phone) === digits
+      );
+    }
+
+    function setEditMode(on, contact) {
+      editingId = on && contact ? contact.id : null;
+      document.getElementById("form-title-text").textContent = on
+        ? "ویرایش تماس"
+        : "ثبت تماس";
+      document.getElementById("save-label").textContent = on
+        ? "بروزرسانی"
+        : "ذخیره";
+      cancelEditBtn.hidden = !on;
+      if (on && contact) {
+        nameEl.value = contact.name;
+        writeDigits(contact.phone);
+      } else {
+        nameEl.value = "";
+        resetPhone();
+      }
+      setPhoneHint();
+    }
+
+    function cancelEdit() {
+      setEditMode(false);
+    }
+
+    function showPage(name) {
+      document.querySelectorAll(".page").forEach((p) => p.classList.remove("active"));
+      document.getElementById("page-" + name).classList.add("active");
+      document.getElementById("nav-form").className =
+        name === "form" ? "btn-nav-active" : "btn-nav";
+      document.getElementById("nav-list").className =
+        name === "list" ? "btn-nav-active" : "btn-nav";
+      if (name === "list") {
+        if (!editingId) cancelEdit();
+        renderList();
+      }
+      if (name === "form") nameEl.focus();
+    }
+
+    document.getElementById("nav-form").onclick = () => {
+      if (!editingId) cancelEdit();
+      showPage("form");
+    };
+    document.getElementById("nav-list").onclick = () => showPage("list");
+    cancelEditBtn.onclick = () => {
+      cancelEdit();
+      showToast("ویرایش لغو شد");
+    };
+
+    document.getElementById("pad").addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn) return;
+      if (btn.dataset.digit != null) {
+        const cur = readDigits();
+        if (cur.length >= 9) {
+          focusDigit(8);
+          return;
+        }
+        writeDigits(cur + btn.dataset.digit);
+        setPhoneHint();
+        focusDigit(Math.min(8, readDigits().length));
+        return;
+      }
+      if (btn.dataset.action === "clear") {
+        resetPhone();
+        focusDigit(0);
+        return;
+      }
+      if (btn.dataset.action === "back") {
+        const cur = readDigits();
+        writeDigits(cur.slice(0, -1));
+        setPhoneHint();
+        focusDigit(Math.max(0, cur.length - 2));
+      }
+    });
+
+    digitEls.forEach((el, i) => {
+      el.addEventListener("input", () => {
+        const v = normalizePhone(el.value).slice(-1);
+        el.value = v;
+        setPhoneHint();
+        if (v && i < digitEls.length - 1) focusDigit(i + 1);
+      });
+      el.addEventListener("keydown", (e) => {
+        if (e.key === "Backspace") {
+          if (el.value) {
+            el.value = "";
+            setPhoneHint();
+            e.preventDefault();
+            return;
+          }
+          if (i > 0) {
+            e.preventDefault();
+            digitEls[i - 1].value = "";
+            focusDigit(i - 1);
+            setPhoneHint();
+          }
+          return;
+        }
+        if (e.key === "ArrowLeft" && i > 0) {
+          e.preventDefault();
+          focusDigit(i - 1);
+        }
+        if (e.key === "ArrowRight" && i < digitEls.length - 1) {
+          e.preventDefault();
+          focusDigit(i + 1);
+        }
+        if (e.key === "Enter") {
+          e.preventDefault();
+          document.getElementById("save-btn").click();
+        }
+      });
+      el.addEventListener("paste", (e) => {
+        e.preventDefault();
+        const pasted = phoneSuffix(e.clipboardData.getData("text"));
+        if (!pasted) return;
+        writeDigits(pasted);
+        setPhoneHint();
+        focusDigit(Math.min(8, pasted.length));
+      });
+      el.addEventListener("focus", () => el.select());
+    });
+
+    nameEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === "Tab") {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          focusDigit(0);
+        }
+      }
+    });
+
+    document.getElementById("save-btn").onclick = () => {
+      const name = nameEl.value.trim();
+      const phone = fullPhone();
+      if (!name) {
+        showToast("لطفاً نام را وارد کنید");
+        nameEl.focus();
+        return;
+      }
+      if (!isValidPhone(phone)) {
+        setPhoneHint(
+          readDigits().length === 0
+            ? "شماره را کامل وارد کنید"
+            : "شماره ناقص است. باید ۹ رقم بعد از ۰۹ باشد"
+        );
+        showToast("شماره نامعتبر است");
+        focusDigit(Math.min(8, readDigits().length));
+        return;
+      }
+      if (isDuplicatePhone(phone, editingId)) {
+        setPhoneHint("این شماره قبلاً ثبت شده است");
+        showToast("شماره تکراری است");
+        focusDigit(0);
+        return;
+      }
+
+      if (editingId) {
+        const c = contacts.find((x) => x.id === editingId);
+        if (!c) return;
+        c.name = name;
+        c.phone = phone;
+        save();
+        cancelEdit();
+        showToast("بروزرسانی شد");
+        showPage("list");
+        return;
+      }
+
+      const createdAt = new Date().toISOString();
+      contacts.unshift({
+        id: crypto.randomUUID(),
+        name,
+        phone,
+        called: false,
+        createdAt,
+        created: new Date(createdAt).toLocaleString("fa-IR"),
+      });
+      save();
+      nameEl.value = "";
+      resetPhone();
+      page = 1;
+      filter = "today";
+      syncFilterButtons();
+      setPhoneHint();
+      showToast("ثبت انجام شد", 5000);
+      nameEl.focus();
+    };
+
+    function escapeHtml(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    function filteredContacts() {
+      return contacts.filter((c) => {
+        if (filter === "today") return isToday(c.createdAt);
+        if (filter === "pending") return !c.called;
+        if (filter === "called") return !!c.called;
+        return true;
+      });
+    }
+
+    function syncFilterButtons() {
+      document.querySelectorAll(".btn-filter").forEach((b) => {
+        b.classList.toggle("active", b.dataset.filter === filter);
+      });
+    }
+
+    document.querySelector(".filter-row").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-filter]");
+      if (!btn) return;
+      filter = btn.dataset.filter;
+      page = 1;
+      syncFilterButtons();
+      renderList();
+    });
+
+    function openDeleteModal(id) {
+      const c = contacts.find((x) => x.id === id);
+      if (!c) return;
+      pendingDeleteId = id;
+      document.getElementById("confirm-text").textContent =
+        "شماره " + c.phone + " مربوط به «" + c.name + "» حذف شود؟";
+      modal.hidden = false;
+      requestAnimationFrame(() => modal.classList.add("open"));
+    }
+
+    function closeDeleteModal() {
+      modal.classList.remove("open");
+      pendingDeleteId = null;
+      setTimeout(() => {
+        modal.hidden = true;
+      }, 180);
+    }
+
+    document.getElementById("confirm-cancel").onclick = closeDeleteModal;
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeDeleteModal();
+    });
+    document.getElementById("confirm-ok").onclick = () => {
+      if (!pendingDeleteId) return;
+      contacts = contacts.filter((c) => c.id !== pendingDeleteId);
+      save();
+      closeDeleteModal();
+      const totalPages = Math.max(1, Math.ceil(filteredContacts().length / PAGE_SIZE));
+      if (page > totalPages) page = totalPages;
+      renderList();
+      showToast("حذف شد");
+    };
+
+    function startEdit(id) {
+      const c = contacts.find((x) => x.id === id);
+      if (!c) return;
+      setEditMode(true, c);
+      showPage("form");
+    }
+
+    function toggleCalled(id) {
+      const c = contacts.find((x) => x.id === id);
+      if (!c) return;
+      c.called = !c.called;
+      save();
+      renderList();
+      showToast(c.called ? "تماس گرفته شد" : "علامت برداشته شد");
+    }
+
+    function renderList() {
+      const items = filteredContacts();
+      const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE) || 1);
+      if (page > totalPages) page = totalPages;
+      const start = (page - 1) * PAGE_SIZE;
+      const slice = items.slice(start, start + PAGE_SIZE);
+
+      listEl.innerHTML = "";
+      empty.hidden = items.length > 0;
+      document.getElementById("empty-text").textContent =
+        contacts.length === 0
+          ? "هنوز تماسی ثبت نشده."
+          : "موردی با این فیلتر پیدا نشد.";
+
+      document.getElementById("filter-count").textContent =
+        toFaDigits(items.length) + " مورد";
+
+      slice.forEach((c) => {
+        const today = isToday(c.createdAt);
+        const row = document.createElement("article");
+        row.className =
+          "contact-row" +
+          (c.called ? " called" : " pending") +
+          (today ? " is-today" : "");
+
+        const badges =
+          (today
+            ? '<span class="badge badge-today">امروز</span>'
+            : "") +
+          (c.called
+            ? '<span class="badge badge-done">تماس گرفته</span>'
+            : '<span class="badge badge-pending">تماس نگرفته</span>');
+
+        row.innerHTML =
+          '<div class="contact-meta">' +
+            '<p class="contact-name">' +
+              escapeHtml(c.name) +
+              badges +
+            "</p>" +
+            '<p class="contact-phone">' + escapeHtml(c.phone) + "</p>" +
+            '<p class="contact-date">' +
+              '<svg class="icon" aria-hidden="true"><use href="#ph-calendar"></use></svg>' +
+              "تاریخ ثبت: " +
+              escapeHtml(formatCreated(c)) +
+            "</p>" +
+          "</div>" +
+          '<div class="contact-actions">' +
+            '<button type="button" class="btn-called' +
+              (c.called ? " is-done" : "") +
+              '" data-act="call" data-id="' +
+              c.id +
+              '">' +
+              (c.called
+                ? '<svg class="icon" aria-hidden="true"><use href="#ph-check-circle"></use></svg> تماس گرفته شد'
+                : '<svg class="icon" aria-hidden="true"><use href="#ph-phone-check"></use></svg> تماس گرفتم') +
+            "</button>" +
+            '<button type="button" class="btn-row-edit" data-act="edit" data-id="' +
+              c.id +
+              '" aria-label="ویرایش">' +
+              '<svg class="icon" aria-hidden="true"><use href="#ph-pencil"></use></svg>' +
+            "</button>" +
+            '<button type="button" class="btn-row-danger" data-act="del" data-id="' +
+              c.id +
+              '" aria-label="حذف">' +
+              '<svg class="icon" aria-hidden="true"><use href="#ph-trash"></use></svg>' +
+            "</button>" +
+          "</div>";
+        listEl.appendChild(row);
+      });
+
+      const showPager = items.length > PAGE_SIZE;
+      pager.hidden = !showPager;
+      document.getElementById("page-info").textContent =
+        toFaDigits(page) + " / " + toFaDigits(totalPages);
+      document.getElementById("page-prev").disabled = page <= 1;
+      document.getElementById("page-next").disabled = page >= totalPages;
+    }
+
+    document.getElementById("page-prev").onclick = () => {
+      if (page > 1) {
+        page -= 1;
+        renderList();
+      }
+    };
+    document.getElementById("page-next").onclick = () => {
+      page += 1;
+      renderList();
+    };
+
+    listEl.addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-act]");
+      if (!btn) return;
+      if (btn.dataset.act === "call") toggleCalled(btn.dataset.id);
+      if (btn.dataset.act === "del") openDeleteModal(btn.dataset.id);
+      if (btn.dataset.act === "edit") startEdit(btn.dataset.id);
+    });
+
+    initTheme();
+    syncFilterButtons();
+
+    if (location.search.includes("check=1")) {
+      const sample = [
+        {
+          id: "a",
+          phone: "09121111111",
+          called: false,
+          createdAt: new Date().toISOString(),
+        },
+        {
+          id: "b",
+          phone: "09122222222",
+          called: true,
+          createdAt: "2020-01-01T00:00:00.000Z",
+        },
+      ];
+      const todayCount = sample.filter((c) => isToday(c.createdAt)).length;
+      const ok =
+        isValidPhone("09121234567") &&
+        !isValidPhone("091212345") &&
+        isDuplicatePhone.toString().includes("exceptId") &&
+        todayCount === 1;
+      document.body.innerHTML = ok ? "<pre>ok</pre>" : "<pre>fail</pre>";
+    }
+  </script>
+</body>
+</html>
