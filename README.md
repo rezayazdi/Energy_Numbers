@@ -4,7 +4,9 @@
 
 ## نصب
 
-فایل نصب را از [Releases](../../releases) دانلود کنید:
+فایل نصب را از این لینک دانلود کنید:
+
+https://github.com/rezayazdi/Energy_Numbers/releases/tag/v1.4.0
 
 `Energy Numbers Setup 1.4.0.exe`
 
