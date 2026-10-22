@@ -430,6 +430,62 @@
       color: var(--muted);
       font-weight: 500;
     }
+    .export-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .export-label {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--muted);
+    }
+
+    .export-sheet { display: none; }
+    @page { size: A4; margin: 14mm; }
+    @media print {
+      body.exporting {
+        background: #fff !important;
+        color: #111 !important;
+      }
+      body.exporting .shell,
+      body.exporting .modal-backdrop,
+      body.exporting .toast { display: none !important; }
+      body.exporting .export-sheet {
+        display: block !important;
+        font-family: var(--font);
+      }
+      body.exporting .export-sheet h1 {
+        margin: 0 0 6px;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      body.exporting .export-sheet .export-meta {
+        margin: 0 0 14px;
+        color: #444;
+        font-size: 13px;
+      }
+      body.exporting .export-sheet table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      body.exporting .export-sheet th,
+      body.exporting .export-sheet td {
+        border: 1px solid #ccc;
+        padding: 8px 10px;
+        text-align: right;
+        font-size: 14px;
+      }
+      body.exporting .export-sheet th {
+        background: #f4f4f5;
+        font-weight: 700;
+      }
+      body.exporting .export-sheet td.num {
+        direction: ltr;
+        text-align: left;
+      }
+      body.exporting .export-sheet thead { display: table-header-group; }
+    }
 
     .contact-list {
       display: flex;
@@ -585,12 +641,43 @@
       flex-wrap: wrap;
     }
 
+    .name-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .name-row input { flex: 1 1 auto; min-width: 0; }
+    .name-row .btn-paste {
+      flex: 0 0 auto;
+      min-width: 56px;
+      padding: 0 14px;
+      background: var(--card);
+      color: var(--fg);
+      border: 2px solid var(--border);
+    }
+    .name-row .btn-paste:hover { background: var(--pad); }
+
     .save-row {
       margin-top: 24px;
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
     }
+
+    .form-toast {
+      margin-top: 14px;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 14px;
+      border-radius: var(--radius);
+      background: color-mix(in srgb, var(--accent) 16%, var(--card));
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      font-size: 1.15rem;
+      font-weight: 700;
+    }
+    .form-toast.show { display: flex; }
 
     .empty {
       padding: 56px 24px;
@@ -699,6 +786,9 @@
     <symbol id="ph-warning" viewBox="0 0 256 256">
       <path fill="currentColor" d="M236.8,188.09,149.35,36.22a24.76,24.76,0,0,0-42.7,0L19.2,188.09a23.51,23.51,0,0,0,0,23.72A24.35,24.35,0,0,0,40.55,224h174.9a24.35,24.35,0,0,0,21.33-12.19A23.51,23.51,0,0,0,236.8,188.09ZM222.93,203.8a8.5,8.5,0,0,1-7.48,4.2H40.55a8.5,8.5,0,0,1-7.48-4.2,7.59,7.59,0,0,1,0-7.72L120.52,44.21a8.75,8.75,0,0,1,15,0l87.45,151.87A7.59,7.59,0,0,1,222.93,203.8ZM116,136V104a12,12,0,0,1,24,0v32a12,12,0,0,1-24,0Zm28,40a16,16,0,1,1-16-16A16,16,0,0,1,144,176Z"/>
     </symbol>
+    <symbol id="ph-clipboard-text" viewBox="0 0 256 256">
+      <path fill="currentColor" d="M168,152a8,8,0,0,1-8,8H96a8,8,0,0,1,0-16h64A8,8,0,0,1,168,152Zm-8-40H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16Zm56-64V216a16,16,0,0,1-16,16H56a16,16,0,0,1-16-16V48A16,16,0,0,1,56,32H92.69A28,28,0,0,1,120,16h16a28,28,0,0,1,27.31,16H200A16,16,0,0,1,216,48ZM96,40a12,12,0,0,0,12,12h40a12,12,0,0,0,12-12,12,12,0,0,0-12-12H108A12,12,0,0,0,96,40ZM200,48H184a28.1,28.1,0,0,1-24,24H96A28.1,28.1,0,0,1,72,48H56V216H200Z"/>
+    </symbol>
   </svg>
 
   <div class="shell">
@@ -730,7 +820,12 @@
             <span id="form-title-text">ثبت تماس</span>
           </h2>
           <label for="name">نام</label>
-          <input id="name" type="text" autocomplete="name" tabindex="1" />
+          <div class="name-row">
+            <input id="name" type="text" autocomplete="name" tabindex="1" />
+            <button type="button" class="btn-paste" id="paste-name" tabindex="-1" title="چسباندن از کلیپ‌بورد" aria-label="چسباندن از کلیپ‌بورد">
+              <svg class="icon" aria-hidden="true"><use href="#ph-clipboard-text"></use></svg>
+            </button>
+          </div>
           <label for="phone">شماره تماس</label>
           <div class="phone-wrap" role="group" aria-label="شماره تماس">
             <span class="phone-prefix" aria-hidden="true">09</span>
@@ -755,6 +850,10 @@
             <button type="button" class="btn-ghost" id="cancel-edit" hidden tabindex="4">
               انصراف
             </button>
+          </div>
+          <div class="form-toast" id="form-toast" role="status" aria-live="polite">
+            <svg class="icon" aria-hidden="true"><use href="#ph-check-circle"></use></svg>
+            <span>با موفقیت ثبت شد</span>
           </div>
         </div>
         <div class="numpad" aria-label="پد شماره">
@@ -796,6 +895,12 @@
           <button type="button" class="btn-filter" data-filter="pending">تماس نگرفته</button>
           <button type="button" class="btn-filter" data-filter="called">تماس گرفته</button>
           <span class="filter-count" id="filter-count"></span>
+          <span class="export-actions" role="group" aria-label="خروجی">
+            <span class="export-label">خروجی</span>
+            <button type="button" class="btn-filter" id="export-csv">CSV</button>
+            <button type="button" class="btn-filter" id="export-xlsx">Excel</button>
+            <button type="button" class="btn-filter" id="export-pdf">PDF</button>
+          </span>
         </div>
       </div>
       <div class="card">
@@ -835,6 +940,7 @@
   </div>
 
   <div class="toast" id="toast" role="status"></div>
+  <div id="export-sheet" class="export-sheet" aria-hidden="true"></div>
 
   <script>
     const KEY = "energy-numbers-contacts";
@@ -853,13 +959,13 @@
     const modal = document.getElementById("confirm-modal");
     const cancelEditBtn = document.getElementById("cancel-edit");
 
-    let contacts = migrate(load());
+    let contacts = [];
     let filter = "all";
     let page = 1;
     let editingId = null;
     let pendingDeleteId = null;
 
-    function load() {
+    function loadLocal() {
       try {
         const raw = localStorage.getItem(KEY);
         const data = raw ? JSON.parse(raw) : [];
@@ -871,13 +977,14 @@
 
     function save() {
       localStorage.setItem(KEY, JSON.stringify(contacts));
+      if (window.energy && window.energy.saveBackup) {
+        window.energy.saveBackup(contacts);
+      }
     }
 
     function migrate(list) {
-      let changed = false;
-      const out = list.map((c) => {
+      return list.map((c) => {
         if (c.createdAt) return c;
-        changed = true;
         const createdAt = new Date().toISOString();
         return {
           ...c,
@@ -885,8 +992,16 @@
           created: c.created || new Date(createdAt).toLocaleString("fa-IR"),
         };
       });
-      if (changed) localStorage.setItem(KEY, JSON.stringify(out));
-      return out;
+    }
+
+    function bootContacts() {
+      let list = loadLocal();
+      if (window.energy && window.energy.loadBackup) {
+        const file = window.energy.loadBackup();
+        if (file !== null) list = file;
+      }
+      contacts = migrate(list);
+      save();
     }
 
     function showToast(msg, ms) {
@@ -1138,6 +1253,40 @@
       }
     });
 
+    async function pasteNameFromClipboard() {
+      let text = "";
+      try {
+        if (window.energy && window.energy.readClipboard) {
+          text = window.energy.readClipboard() || "";
+        } else if (navigator.clipboard && navigator.clipboard.readText) {
+          text = await navigator.clipboard.readText();
+        }
+      } catch {
+        text = "";
+      }
+      text = String(text || "").trim().split(/\r?\n/)[0].trim();
+      if (!text) {
+        showToast("کلیپ‌بورد خالی است");
+        return;
+      }
+      nameEl.value = text;
+      nameEl.focus();
+      showToast("نام از کلیپ‌بورد چسبانده شد");
+    }
+
+    document.getElementById("paste-name").onclick = () => {
+      pasteNameFromClipboard();
+    };
+
+    window.addEventListener("beforeunload", () => {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(contacts));
+        if (window.energy && window.energy.saveBackup) {
+          window.energy.saveBackup(contacts);
+        }
+      } catch {}
+    });
+
     document.getElementById("save-btn").onclick = () => {
       const name = nameEl.value.trim();
       const phone = fullPhone();
@@ -1191,9 +1340,16 @@
       filter = "today";
       syncFilterButtons();
       setPhoneHint();
-      showToast("ثبت انجام شد", 5000);
+      showFormToast();
       nameEl.focus();
     };
+
+    function showFormToast() {
+      const el = document.getElementById("form-toast");
+      el.classList.add("show");
+      clearTimeout(showFormToast._t);
+      showFormToast._t = setTimeout(() => el.classList.remove("show"), 5000);
+    }
 
     function escapeHtml(s) {
       return String(s)
@@ -1373,6 +1529,329 @@
       if (btn.dataset.act === "edit") startEdit(btn.dataset.id);
     });
 
+    const FILTER_FA = {
+      all: "همه",
+      today: "امروز",
+      pending: "تماس نگرفته",
+      called: "تماس گرفته",
+    };
+
+    function exportBaseName() {
+      const suffix = {
+        all: "",
+        today: "-امروز",
+        pending: "-تماس-نگرفته",
+        called: "-تماس-گرفته",
+      }[filter];
+      return "شماره-ها" + (suffix || "");
+    }
+
+    function exportRows() {
+      const rows = filteredContacts().map((c) => ({ name: c.name, phone: c.phone }));
+      if (!rows.length) {
+        showToast("موردی برای خروجی نیست");
+        return null;
+      }
+      return rows;
+    }
+
+    function csvCell(value) {
+      return '"' + String(value).replace(/"/g, '""') + '"';
+    }
+
+    function toCsv(rows) {
+      const lines = [csvCell("نام") + "," + csvCell("شماره")];
+      rows.forEach((row) => lines.push(csvCell(row.name) + "," + csvCell(row.phone)));
+      return "\uFEFF" + lines.join("\r\n") + "\r\n";
+    }
+
+    function xmlEscape(value) {
+      return String(value)
+        .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    }
+
+    function crc32(bytes) {
+      let c = ~0;
+      for (let i = 0; i < bytes.length; i++) {
+        c ^= bytes[i];
+        for (let k = 0; k < 8; k++) c = (c >>> 1) ^ (0xedb88320 & -(c & 1));
+      }
+      return ~c >>> 0;
+    }
+
+    function le(n, size) {
+      const b = new Uint8Array(size);
+      for (let i = 0; i < size; i++) b[i] = (n >>> (8 * i)) & 255;
+      return b;
+    }
+
+    function concatBytes(parts) {
+      let len = 0;
+      parts.forEach((p) => {
+        len += p.length;
+      });
+      const out = new Uint8Array(len);
+      let offset = 0;
+      parts.forEach((p) => {
+        out.set(p, offset);
+        offset += p.length;
+      });
+      return out;
+    }
+
+    function zipStore(files) {
+      const enc = new TextEncoder();
+      const locals = [];
+      const centrals = [];
+      let offset = 0;
+      files.forEach((file) => {
+        const name = enc.encode(file.name);
+        const data = enc.encode(file.data);
+        const crc = crc32(data);
+        const local = concatBytes([
+          le(0x04034b50, 4),
+          le(20, 2),
+          le(0, 2),
+          le(0, 2),
+          le(0, 2),
+          le(0, 2),
+          le(crc, 4),
+          le(data.length, 4),
+          le(data.length, 4),
+          le(name.length, 2),
+          le(0, 2),
+          name,
+          data,
+        ]);
+        locals.push(local);
+        centrals.push(
+          concatBytes([
+            le(0x02014b50, 4),
+            le(20, 2),
+            le(20, 2),
+            le(0, 2),
+            le(0, 2),
+            le(0, 2),
+            le(0, 2),
+            le(crc, 4),
+            le(data.length, 4),
+            le(data.length, 4),
+            le(name.length, 2),
+            le(0, 2),
+            le(0, 2),
+            le(0, 2),
+            le(0, 2),
+            le(0, 4),
+            le(offset, 4),
+            name,
+          ])
+        );
+        offset += local.length;
+      });
+      const central = concatBytes(centrals);
+      return concatBytes(
+        locals.concat([
+          central,
+          concatBytes([
+            le(0x06054b50, 4),
+            le(0, 2),
+            le(0, 2),
+            le(files.length, 2),
+            le(files.length, 2),
+            le(central.length, 4),
+            le(offset, 4),
+            le(0, 2),
+          ]),
+        ])
+      );
+    }
+
+    function toXlsx(rows) {
+      const lines = [
+        '<row r="1"><c r="A1" t="inlineStr"><is><t>نام</t></is></c><c r="B1" t="inlineStr" s="1"><is><t>شماره</t></is></c></row>',
+      ];
+      rows.forEach((row, i) => {
+        const r = i + 2;
+        lines.push(
+          '<row r="' +
+            r +
+            '"><c r="A' +
+            r +
+            '" t="inlineStr"><is><t xml:space="preserve">' +
+            xmlEscape(row.name) +
+            '</t></is></c><c r="B' +
+            r +
+            '" t="inlineStr" s="1"><is><t xml:space="preserve">' +
+            xmlEscape(row.phone) +
+            "</t></is></c></row>"
+        );
+      });
+      const sheet =
+        '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+        '<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+        '<dimension ref="A1:B' +
+        (rows.length + 1) +
+        '"/>' +
+        '<sheetViews><sheetView rightToLeft="1" tabSelected="1" workbookViewId="0"/></sheetViews>' +
+        '<cols><col min="1" max="1" width="28" customWidth="1"/><col min="2" max="2" width="18" customWidth="1"/></cols>' +
+        "<sheetData>" +
+        lines.join("") +
+        "</sheetData></worksheet>";
+      return zipStore([
+        {
+          name: "[Content_Types].xml",
+          data:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">' +
+            '<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>' +
+            '<Default Extension="xml" ContentType="application/xml"/>' +
+            '<Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/>' +
+            '<Override PartName="/xl/worksheets/sheet1.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>' +
+            '<Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>' +
+            "</Types>",
+        },
+        {
+          name: "_rels/.rels",
+          data:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>' +
+            "</Relationships>",
+        },
+        {
+          name: "xl/workbook.xml",
+          data:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">' +
+            '<sheets><sheet name="شماره ها" sheetId="1" r:id="rId1"/></sheets></workbook>',
+        },
+        {
+          name: "xl/_rels/workbook.xml.rels",
+          data:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">' +
+            '<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>' +
+            '<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>' +
+            "</Relationships>",
+        },
+        { name: "xl/worksheets/sheet1.xml", data: sheet },
+        {
+          name: "xl/styles.xml",
+          data:
+            '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>' +
+            '<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">' +
+            '<fonts count="1"><font><sz val="11"/><name val="Calibri"/></font></fonts>' +
+            '<fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills>' +
+            "<borders count=\"1\"><border><left/><right/><top/><bottom/><diagonal/></border></borders>" +
+            '<cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>' +
+            '<cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>' +
+            '<xf numFmtId="49" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/></cellXfs>' +
+            '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>' +
+            "</styleSheet>",
+        },
+      ]);
+    }
+
+    function fillExportSheet(rows) {
+      const body = rows
+        .map(
+          (row) =>
+            "<tr><td>" +
+            escapeHtml(row.name) +
+            '</td><td class="num">' +
+            escapeHtml(row.phone) +
+            "</td></tr>"
+        )
+        .join("");
+      document.getElementById("export-sheet").innerHTML =
+        "<h1>لیست نام و شماره‌ها</h1>" +
+        '<p class="export-meta">' +
+        escapeHtml(FILTER_FA[filter] || "") +
+        "، " +
+        toFaDigits(rows.length) +
+        " مورد</p>" +
+        "<table><thead><tr><th>نام</th><th>شماره</th></tr></thead><tbody>" +
+        body +
+        "</tbody></table>";
+    }
+
+    async function saveBytes(filename, ext, bytes, filterName) {
+      if (window.energy && window.energy.saveFile) {
+        return window.energy.saveFile({ filename, ext, bytes, filterName });
+      }
+      const a = document.createElement("a");
+      const url = URL.createObjectURL(new Blob([bytes]));
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      return true;
+    }
+
+    document.getElementById("export-csv").onclick = async () => {
+      const rows = exportRows();
+      if (!rows) return;
+      try {
+        const ok = await saveBytes(
+          exportBaseName() + ".csv",
+          "csv",
+          new TextEncoder().encode(toCsv(rows)),
+          "CSV"
+        );
+        if (ok) showToast("فایل CSV ذخیره شد");
+      } catch {
+        showToast("ذخیره CSV نشد");
+      }
+    };
+
+    document.getElementById("export-xlsx").onclick = async () => {
+      const rows = exportRows();
+      if (!rows) return;
+      try {
+        const ok = await saveBytes(
+          exportBaseName() + ".xlsx",
+          "xlsx",
+          toXlsx(rows),
+          "Excel"
+        );
+        if (ok) showToast("فایل Excel ذخیره شد");
+      } catch {
+        showToast("ذخیره Excel نشد");
+      }
+    };
+
+    document.getElementById("export-pdf").onclick = async () => {
+      const rows = exportRows();
+      if (!rows) return;
+      fillExportSheet(rows);
+      document.body.classList.add("exporting");
+      try {
+        if (window.energy && window.energy.savePdf) {
+          const ok = await window.energy.savePdf(exportBaseName() + ".pdf");
+          if (ok) showToast("PDF ذخیره شد");
+          return;
+        }
+        await new Promise((resolve) => {
+          const done = () => {
+            window.removeEventListener("afterprint", done);
+            resolve();
+          };
+          window.addEventListener("afterprint", done);
+          window.print();
+        });
+      } catch {
+        showToast("ذخیره PDF نشد");
+      } finally {
+        document.body.classList.remove("exporting");
+      }
+    };
+
+    bootContacts();
     initTheme();
     syncFilterButtons();
 
@@ -1392,11 +1871,23 @@
         },
       ];
       const todayCount = sample.filter((c) => isToday(c.createdAt)).length;
+      const csv = toCsv([{ name: 'علی "الف"', phone: "09121111111" }]);
+      const xlsxText = new TextDecoder().decode(
+        toXlsx([{ name: "a<b", phone: "09121111111" }])
+      );
       const ok =
         isValidPhone("09121234567") &&
         !isValidPhone("091212345") &&
         isDuplicatePhone.toString().includes("exceptId") &&
-        todayCount === 1;
+        todayCount === 1 &&
+        csv.startsWith("\uFEFF") &&
+        csv.includes('"علی ""الف"""') &&
+        csv.includes('"09121111111"') &&
+        crc32(new TextEncoder().encode("123456789")) === 0xcbf43926 &&
+        xlsxText.startsWith("PK") &&
+        xlsxText.includes("a&lt;b") &&
+        xlsxText.includes(">09121111111<") &&
+        xlsxText.includes('t="inlineStr"');
       document.body.innerHTML = ok ? "<pre>ok</pre>" : "<pre>fail</pre>";
     }
   </script>

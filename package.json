@@ -1,6 +1,6 @@
 {
   "name": "energy-numbers",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "ثبت نام و شماره تماس با پد بزرگ",
   "main": "main.js",
   "author": "Energy Numbers",
@@ -17,6 +17,7 @@
     },
     "files": [
       "main.js",
+      "preload.js",
       "index.html",
       "fonts/**/*"
     ],
