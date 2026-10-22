@@ -1,6 +1,6 @@
 {
   "name": "energy-numbers",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "ثبت نام و شماره تماس با پد بزرگ",
   "main": "main.js",
   "author": "Energy Numbers",
@@ -33,10 +33,13 @@
       "oneClick": true,
       "perMachine": false,
       "allowToChangeInstallationDirectory": false,
+      "deleteAppDataOnUninstall": false,
+      "guid": "8f3c2a1b-9d4e-4f67-a812-7c6b5a4d3e2f",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Energy Numbers",
-      "runAfterFinish": true
+      "runAfterFinish": true,
+      "uninstallDisplayName": "Energy Numbers"
     }
   },
   "devDependencies": {

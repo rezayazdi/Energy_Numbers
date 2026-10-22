@@ -6,11 +6,11 @@
 
 فایل نصب را از این لینک دانلود کنید:
 
-https://github.com/rezayazdi/Energy_Numbers/releases/tag/v1.5.0
+https://github.com/rezayazdi/Energy_Numbers/releases/tag/v1.6.0
 
-`Energy Numbers Setup 1.5.0.exe`
+`Energy Numbers Setup 1.6.0.exe`
 
-بعد از نصب، میانبر دسکتاپ ساخته می‌شود و برنامه باز می‌شود. پیش‌نیاز ندارد.
+نصب روی نسخه قبلی به‌صورت آپدیت است و داده‌های ثبت‌شده پاک نمی‌شود. بعد از نصب، میانبر دسکتاپ ساخته می‌شود و برنامه باز می‌شود. پیش‌نیاز ندارد.
 
 ## توسعه
 

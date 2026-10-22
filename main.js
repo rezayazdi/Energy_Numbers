@@ -6,8 +6,45 @@ function withExt(filePath, ext) {
   return filePath.toLowerCase().endsWith("." + ext) ? filePath : filePath + "." + ext;
 }
 
+// Fixed folder so upgrades keep contacts even if Electron userData name changes.
+function backupDir() {
+  const dir = path.join(app.getPath("appData"), "EnergyNumbers");
+  fs.mkdirSync(dir, { recursive: true });
+  return dir;
+}
+
 function backupPath() {
-  return path.join(app.getPath("userData"), "contacts-backup.json");
+  return path.join(backupDir(), "contacts-backup.json");
+}
+
+function legacyBackupPaths() {
+  return [
+    path.join(app.getPath("userData"), "contacts-backup.json"),
+    path.join(app.getPath("appData"), "energy-numbers", "contacts-backup.json"),
+    path.join(app.getPath("appData"), "Energy Numbers", "contacts-backup.json"),
+  ];
+}
+
+function readBackupFile() {
+  const primary = backupPath();
+  if (fs.existsSync(primary)) {
+    try {
+      const data = JSON.parse(fs.readFileSync(primary, "utf8"));
+      return Array.isArray(data) ? data : null;
+    } catch {
+      return null;
+    }
+  }
+  for (const file of legacyBackupPaths()) {
+    if (!fs.existsSync(file)) continue;
+    try {
+      const data = JSON.parse(fs.readFileSync(file, "utf8"));
+      if (!Array.isArray(data)) continue;
+      fs.writeFileSync(primary, JSON.stringify(data), "utf8");
+      return data;
+    } catch {}
+  }
+  return null;
 }
 
 function createWindow() {
@@ -37,17 +74,7 @@ ipcMain.on("backup-save", (event, data) => {
 });
 
 ipcMain.on("backup-load", (event) => {
-  try {
-    const file = backupPath();
-    if (!fs.existsSync(file)) {
-      event.returnValue = null;
-      return;
-    }
-    const data = JSON.parse(fs.readFileSync(file, "utf8"));
-    event.returnValue = Array.isArray(data) ? data : null;
-  } catch {
-    event.returnValue = null;
-  }
+  event.returnValue = readBackupFile();
 });
 
 ipcMain.on("clipboard-read", (event) => {
